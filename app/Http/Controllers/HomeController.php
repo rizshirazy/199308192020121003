@@ -31,7 +31,33 @@ class HomeController extends Controller
         $json_decode2 = json_decode($response2, true);
 
         $rawData = $json_decode1['Form Responses 1'];
-        $this->data = array_values(array_sort($rawData, function ($value) {
+        $dataPeserta = [];
+
+
+        foreach ($rawData as $peserta) {
+            $id = $peserta['id'];
+
+            $dataPeserta[$id]['nama'] = $peserta['nama'];
+            $dataPeserta[$id]['nip'] =  $peserta['nip'];
+            $dataPeserta[$id]['satuan_kerja'] =  $peserta['satuan_kerja'];
+            $dataPeserta[$id]['posisi_yang_dipilih'] =  $peserta['posisi_yang_dipilih'];
+            $dataPeserta[$id]['posisi_yang_dipilih'] =  $peserta['posisi_yang_dipilih'];
+            $dataPeserta[$id]['bahasa_pemrograman_yang_dikuasai'] =  $peserta['bahasa_pemrograman_yang_dikuasai'];
+            $dataPeserta[$id]['database_yang_dikuasai'] =  $peserta['database_yang_dikuasai'];
+            $dataPeserta[$id]['tools_yang_dikuasai'] =  $peserta['tools_yang_dikuasai'];
+            $dataPeserta[$id]['pernah_membuat_mobile_apps'] =  $peserta['pernah_membuat_mobile_apps'];
+
+            $i = 0;
+            foreach ($json_decode2 as $nilai) {
+                if ($peserta['id'] == $nilai['id_pendaftar']) {
+                    $dataPeserta[$id]['nilai'][$i]['jenis_attr'] = $nilai['jenis_attr'];
+                    $dataPeserta[$id]['nilai'][$i]['value'] = $nilai['value'];
+                    $i++;
+                }
+            }
+        }
+
+        $this->data = array_values(array_sort($dataPeserta, function ($value) {
             return $value['posisi_yang_dipilih'];
         }));
 
